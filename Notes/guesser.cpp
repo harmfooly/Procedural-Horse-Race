@@ -1,44 +1,52 @@
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <random>
 
 int main(){
-  std::string userName;
-  int guess;
   int correct;
+  int guess;
   int turns = 0;
+  std::string name;
   bool keepGoing = true;
-  
-  srand(time(NULL));
-  correct = (rand() % 100) + 1;
+ 
+  const int FAIL = 9999;
 
-  std::cout << "Correct answer: " << correct << std::endl;
+  std::random_device rd;
+  std::uniform_int_distribution<int> dist(1, 100);
+
+  correct = dist(rd);
+
+  std::cout << "Correct: " << correct << std::endl;
 
   while (keepGoing){
     turns++;
-    // ignore bad input for now...
-    std::cout << turns << ": Please make a guess: ";
+    std::cout << turns << ") Please enter a number: ";
     std::cin >> guess;
+    if (std::cin.fail()){
+      // clear the fail state and clean up the buffer
+      std::cin.clear();
+      std::cin.ignore(256, '\n');
+      guess = FAIL;
+    } // end if
 
-    if (guess < correct){
-      std::cout << "Too low." << std::endl;
+    if (guess == FAIL){
+      std::cout << "invalid input" << std::endl;
+    } else if (guess < correct){
+      std::cout << "too low." << std::endl;
     } else if (guess > correct){
-      std::cout << "Too high." << std::endl;
+      std::cout << "too high." << std::endl;
     } else {
-      std::cout << "You got it!" << std::endl;
+      std::cout << "you got it! " << std::endl;
       keepGoing = false;
     } // end if
   } // end while
 
   if (turns < 7){
-    std::cout << "Great work!" << std::endl;
+    std::cout << "Great job!" << std::endl;
   } else if (turns > 7){
-    std::cout << "You could do better" << std::endl;
+    std::cout << "You should be able to do it in 7 turns or less... Just sayin'." << std::endl;
   } else {
-    std::cout << "Average performance" << std::endl;
+    std::cout << "Good." << std::endl;
   } // end if
 
-  
   return 0;
 } // end main
-
