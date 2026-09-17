@@ -1,7 +1,6 @@
 // Algorithm is in README.md
 
 #include <iostream>
-#include <string>
 #include <ctime>
 #include <cstdlib>
 
@@ -10,47 +9,53 @@ const int TRACK_LENGTH = 12;
 const int HORSE_NUM = 5;
 
 
-
 void advance(int horseNum, int* horses){
-	int coin = std::rand() % 2;
-	if (coin == 1) {
+	int coinflip = (rand() % 2);
+	if (coinflip == 1) {
 		horses[horseNum]++;
 	}
 } // end advance
 
 void printLane(int horseNum, int* horses){
-        for (int j = 0; j < TRACK_LENGTH; j++) {
+        for (int j = 0; j < TRACK_LENGTH + 1; j++) {
             if (j == horses[horseNum]) {
 		    std::cout << horseNum;
       } else {
-	      std::cout << ".";
+	      std::cout << ". ";
             } // end if
         } // end for
+std::cout << std::endl;
     } // end printLane
 
 bool isWinner(int horseNum, int* horses){
 	bool winner = false;
-	if (horses[horseNum] > TRACK_LENGTH) {
+	if (horses[horseNum] >=  TRACK_LENGTH) {
 		winner = true;
 	}
 	return winner;
 } // end isWinner
 
 int main(){
+	srand(time(NULL));
 	bool keepGoing = true;
 	int horses[HORSE_NUM] = {0};
-	int turn;
+	int turns = 0;
 
 	while (keepGoing) {
-		std::cout << "\n PRESS ANYTHING TO CONTINUE. " << std::endl;
-                std::cin >> turn;	
+		turns++;
+                std::cout << "\n PRESS ENTER TO CONTINUE. " << std::endl;
+                std::cin.get();
+
 		for (int hn = 0; hn < HORSE_NUM; hn++) {
-			printLane(hn, horses);
+			 printLane(hn, horses);
+                         advance(hn, horses);
 			if (isWinner(hn, horses)) {
 				keepGoing = false;
-				std::cout << "Horse " << hn << " wins!" << std::endl;
+				std::cout << "\nHorse " << hn << " wins!" << std::endl;
+				std::cout << "It took " << turns << " turns to get here!" << std::endl;
 			} // end if
 		} // end for
+		std::cout << "\n---------------------------------" << std::endl;
 	} // end while
 	return 0;
 } // end main
